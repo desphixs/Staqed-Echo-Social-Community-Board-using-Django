@@ -14,3 +14,13 @@ def index(request):
     
     # Render the template with the real data from the database
     return render(request, 'posts/index.html', context)
+
+def post_detail(request, pk):
+    # Fetch the specific post using its ID (primary key)
+    post = Post.objects.get(pk=pk)
+    
+    context = {
+        'post': post
+    }
+    
+    return render(request, 'posts/post_detail.html', context)

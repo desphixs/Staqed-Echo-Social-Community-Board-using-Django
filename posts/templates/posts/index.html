@@ -36,7 +36,7 @@
             {% for topic in topics %}
                 <article class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                     <h2 class="text-xl font-semibold text-slate-900">
-                        <a href="#" class="hover:text-indigo-600 transition-colors">{{ topic.title }}</a>
+                        <a href="{% url 'post_detail' topic.id %}" class="hover:text-indigo-600 transition-colors">{{ topic.title }}</a>
                     </h2>
                     <div class="flex items-center gap-2 mt-2 text-xs text-slate-400 font-medium">
                         <span>Posted on {{ topic.created_at|date:"F j, Y" }}</span>
