@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +9,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-slate-50 text-slate-900 antialiased min-h-screen">
 
     <!-- Simple Modern Header -->
@@ -19,7 +24,7 @@
             <a href="/" class="text-xl font-bold tracking-tight text-indigo-600">Echo</a>
             <div class="flex gap-6 text-sm font-medium text-slate-600">
                 <a href="/" class="hover:text-indigo-600 transition-colors">Feed</a>
-                <a href="#" class="hover:text-indigo-600 transition-colors">Create Post</a>
+                <a href="{% url 'create_post' %}" class="hover:text-indigo-600 transition-colors">Create Post</a>
             </div>
         </nav>
     </header>
@@ -30,28 +35,31 @@
             <h1 class="text-3xl font-bold tracking-tight text-slate-900">Latest Conversations</h1>
             <p class="text-slate-500 mt-2">Join the discussion with developers from around the world.</p>
         </div>
-        
+
         <!-- Post Feed -->
         <div class="space-y-6">
             {% for topic in topics %}
-                <article class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                    <h2 class="text-xl font-semibold text-slate-900">
-                        <a href="{% url 'post_detail' topic.id %}" class="hover:text-indigo-600 transition-colors">{{ topic.title }}</a>
-                    </h2>
-                    <div class="flex items-center gap-2 mt-2 text-xs text-slate-400 font-medium">
-                        <span>Posted on {{ topic.created_at|date:"F j, Y" }}</span>
-                    </div>
-                    <p class="mt-4 text-slate-600 leading-relaxed">
-                        {{ topic.content|truncatechars:200 }}
-                    </p>
-                </article>
-            {% empty %}
-                <div class="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
-                    <p class="text-slate-500">No topics have been posted yet. Why not start one?</p>
+            <article
+                class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                <h2 class="text-xl font-semibold text-slate-900">
+                    <a href="{% url 'post_detail' topic.id %}" class="hover:text-indigo-600 transition-colors">{{
+                        topic.title }}</a>
+                </h2>
+                <div class="flex items-center gap-2 mt-2 text-xs text-slate-400 font-medium">
+                    <span>Posted on {{ topic.created_at|date:"F j, Y" }}</span>
                 </div>
+                <p class="mt-4 text-slate-600 leading-relaxed">
+                    {{ topic.content|truncatechars:200 }}
+                </p>
+            </article>
+            {% empty %}
+            <div class="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
+                <p class="text-slate-500">No topics have been posted yet. Why not start one?</p>
+            </div>
             {% endfor %}
         </div>
     </main>
 
 </body>
+
 </html>
