@@ -1,7 +1,14 @@
 from django.shortcuts import render, redirect # Tools to show pages and move users around
-from django.contrib.auth import authenticate, login # Tools to check credentials and sign users in
+from django.contrib.auth import authenticate, login, logout # Added logout here
 from django.contrib import messages # Tool to show alerts and error messages
 from .forms import UserRegisterForm, UserLoginForm # Import the forms we built
+
+# This view handles when a user wants to leave the clubhouse
+def logout_view(request):
+    # We officially end the user's session (take back their badge)
+    logout(request)
+    # We show them the goodbye page
+    return render(request, 'userauths/signout.html')
 
 # This view handles the user registration (Signup)
 def register_view(request):

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goodbye | Echo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col items-center justify-center">
+
+    <div class="text-center bg-white p-12 rounded-3xl border border-slate-200 shadow-sm max-w-sm mx-auto">
+        <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+        </div>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Signed Out</h1>
+        <p class="mt-4 text-slate-500 leading-relaxed">
+            You have been successfully signed out of Echo. We hope to see you back soon!
+        </p>
+        <div class="mt-8 space-y-3">
+            <a href="{% url 'signin' %}" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-indigo-200">
+                Sign In Again
+            </a>
+            <a href="/" class="block w-full text-slate-600 font-medium hover:text-indigo-600 transition-colors">
+                Back to Feed
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
