@@ -46,13 +46,19 @@
                     {{ post.title }}
                 </h1>
                 <div class="flex items-center gap-3 mt-4 text-sm font-medium">
-                    <span class="text-slate-400 mr-auto">Published on {{ post.created_at|date:"F j, Y" }}</span>
-                    <a href="{% url 'edit_post' post.id %}" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-all">
-                        Edit
-                    </a>
-                    <a href="{% url 'delete_post' post.id %}" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all">
-                        Delete
-                    </a>
+                    <div class="mr-auto flex items-center gap-2 text-slate-400">
+                        <span>By <span class="text-slate-600 font-semibold">{{ post.author.username|default:"Anonymous" }}</span></span>
+                        <span class="text-slate-300">•</span>
+                        <span>{{ post.created_at|date:"F j, Y" }}</span>
+                    </div>
+                    {% if post.author == user %}
+                        <a href="{% url 'edit_post' post.id %}" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+                            Edit
+                        </a>
+                        <a href="{% url 'delete_post' post.id %}" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all">
+                            Delete
+                        </a>
+                    {% endif %}
                 </div>
             </header>
 

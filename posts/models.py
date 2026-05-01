@@ -1,9 +1,11 @@
 from django.db import models
+from django.conf import settings # Import settings to reference our custom User model
 
 # Create your models here.
 
 class Post(models.Model):
     # A short title for the community post
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts', null=True, blank=True)
     title = models.CharField(max_length=200)
     
     # The actual content of the post

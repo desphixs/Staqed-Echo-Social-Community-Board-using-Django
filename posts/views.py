@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect # Import render to show HTML pages and redirect to move users between pages
 from .models import Post # Import our Post model so we can talk to the database
 from .forms import PostForm # Import the PostForm we built to handle user input
+from django.contrib.auth.decorators import login_required # This is a "Lock" that only lets logged-in users enter a view
 
 # Create your views here.
 
@@ -28,6 +29,7 @@ def post_detail(request, pk): # This view handles the individual page for a sing
     # Render the detail template with that specific post's content
     return render(request, 'posts/post_detail.html', context)
 
+@login_required # Only allow logged-in users to create posts
 def create_post(request): # This view handles the "New Post" page
     # Check if the user is submitting the form (POST method)
     if request.method == 'POST':
@@ -35,8 +37,12 @@ def create_post(request): # This view handles the "New Post" page
         form = PostForm(request.POST)
         # Check if the data is valid (no missing fields, etc.)
         if form.is_valid():
-            # Save the new post to the database
-            form.save()
+            # 1. We tell Django: "Hold on, don't save to the database just yet!"
+            post = form.save(commit=False)
+            # 2. We manually sign the post by attaching the current user as the author
+            post.author = request.user
+            # 3. NOW we save it for real
+            post.save()
             # Redirect the user back to the home page so they can see their post
             return redirect('index')
     else:
@@ -46,9 +52,15 @@ def create_post(request): # This view handles the "New Post" page
     # Render the create_post.html template and pass the form object
     return render(request, 'posts/create_post.html', {'form': form})
 
+@login_required # Only allow logged-in users to edit posts
 def edit_post(request, pk): # This view handles updating an existing post
     # First, find the post the user wants to edit using its ID
     post = Post.objects.get(pk=pk)
+    
+    # SECURITY CHECK: Only let the author edit their own post
+    if post.author != request.user:
+        # If they aren't the author, kick them back to the homepage
+        return redirect('index')
     
     # Check if the user is submitting their changes (POST method)
     if request.method == 'POST':
@@ -67,9 +79,15 @@ def edit_post(request, pk): # This view handles updating an existing post
     # Render the edit_post.html template and pass both the form and the post object
     return render(request, 'posts/edit_post.html', {'form': form, 'post': post})
 
+@login_required # Only allow logged-in users to delete posts
 def delete_post(request, pk): # This view handles deleting a post
     # Fetch the specific post the user wants to delete using its ID
     post = Post.objects.get(pk=pk)
+    
+    # SECURITY CHECK: Only let the author delete their own post
+    if post.author != request.user:
+        # If they aren't the author, kick them back to the homepage
+        return redirect('index')
     
     # Check if the user confirmed the deletion (POST method)
     if request.method == 'POST':
