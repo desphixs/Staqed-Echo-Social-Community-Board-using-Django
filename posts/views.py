@@ -66,3 +66,17 @@ def edit_post(request, pk): # This view handles updating an existing post
         
     # Render the edit_post.html template and pass both the form and the post object
     return render(request, 'posts/edit_post.html', {'form': form, 'post': post})
+
+def delete_post(request, pk): # This view handles deleting a post
+    # Fetch the specific post the user wants to delete using its ID
+    post = Post.objects.get(pk=pk)
+    
+    # Check if the user confirmed the deletion (POST method)
+    if request.method == 'POST':
+        # Delete the post from the database
+        post.delete()
+        # Redirect back to the home page after deletion
+        return redirect('index')
+    
+    # If it's a GET request, show the confirmation page
+    return render(request, 'posts/delete_post.html', {'post': post})

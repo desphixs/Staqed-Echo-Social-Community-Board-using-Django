@@ -11,6 +11,9 @@ urlpatterns = [
     # Edit Page: Capture the post ID and add /edit/ to the end of the URL
     path('post/<int:pk>/edit/', views.edit_post, name='edit_post'),
     
+    # Delete Page: Capture the post ID and add /delete/ to the end of the URL
+    path('post/<int:pk>/delete/', views.delete_post, name='delete_post'),
+    
     # Create Page: A fixed path for the post submission form
     path('create/', views.create_post, name='create_post'),
 ]
