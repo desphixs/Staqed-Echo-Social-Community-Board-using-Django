@@ -66,6 +66,59 @@
                 {{ post.content|linebreaks }}
             </div>
         </article>
+
+        <!-- Comments Section -->
+        <section class="mt-12">
+            <h3 class="text-2xl font-bold tracking-tight text-slate-900 mb-8 flex items-center gap-3">
+                Conversations
+                <span class="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-sm font-medium">{{ comments.count }}</span>
+            </h3>
+
+            <!-- Comment Form -->
+            <div class="bg-white border border-slate-200 p-6 rounded-3xl mb-10 shadow-sm">
+                {% if user.is_authenticated %}
+                    <form method="POST" class="space-y-4">
+                        {% csrf_token %}
+                        {{ form.content }}
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg shadow-indigo-200 active:scale-[0.98] text-sm">
+                                Post Comment
+                            </button>
+                        </div>
+                    </form>
+                {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-slate-500 text-sm mb-4">Please sign in to join the conversation.</p>
+                        <a href="{% url 'signin' %}" class="text-indigo-600 font-semibold hover:underline text-sm">Sign In</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Comments List -->
+            <div class="space-y-6">
+                {% for comment in comments %}
+                <div class="flex gap-4 p-6 bg-white border border-slate-200 rounded-3xl shadow-sm">
+                    <!-- Avatar Placeholder -->
+                    <div class="flex-shrink-0 w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 font-bold text-sm">
+                        {{ comment.user.username|slice:":1"|upper }}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-bold text-slate-900">{{ comment.user.username }}</h4>
+                            <span class="text-xs text-slate-400 font-medium">{{ comment.created_at|timesince }} ago</span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            {{ comment.content }}
+                        </p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-12 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                    <p class="text-slate-400 text-sm">No comments yet. Be the first to start the conversation!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
     </main>
 
 </body>

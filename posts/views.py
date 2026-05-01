@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # Import render to show HTML pages and redirect to move users between pages
-from .models import Post # Import our Post model so we can talk to the database
-from .forms import PostForm # Import the PostForm we built to handle user input
+from .models import Post, Comment # Import our models
+from .forms import PostForm, CommentForm # Import our forms
 from django.contrib.auth.decorators import login_required # This is a "Lock" that only lets logged-in users enter a view
 
 # Create your views here.
@@ -18,15 +18,39 @@ def index(request): # This view handles the homepage feed
     return render(request, 'posts/index.html', context)
 
 def post_detail(request, pk): # This view handles the individual page for a single post
-    # Fetch the specific post using its unique ID (pk stands for primary key)
+    # Fetch the specific post
     post = Post.objects.get(pk=pk)
+    # Fetch all comments for this post
+    comments = post.comments.all().order_by('-created_at')
     
-    # Put just that one post into the context dictionary
+    # Handle comment submission
+    if request.method == 'POST':
+        # Only logged-in users can comment
+        if not request.user.is_authenticated:
+            return redirect('signin')
+            
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            # Create the comment object but don't save to DB yet
+            comment = form.save(commit=False)
+            # Link the comment to the current post and user
+            comment.post = post
+            comment.user = request.user
+            # Save it for real
+            comment.save()
+            # Refresh the page to show the new comment
+            return redirect('post_detail', pk=post.pk)
+    else:
+        # If visiting the page, show a blank comment form
+        form = CommentForm()
+    
+    # Combine everything for the template
     context = {
-        'post': post # The key 'post' is what we use in post_detail.html
+        'post': post,
+        'comments': comments,
+        'form': form
     }
     
-    # Render the detail template with that specific post's content
     return render(request, 'posts/post_detail.html', context)
 
 @login_required # Only allow logged-in users to create posts

@@ -1,5 +1,5 @@
 from django import forms # Import Django's form tools
-from .models import Post # Import our Post model so the form knows what data it handles
+from .models import Post, Comment # Import our models
 
 class PostForm(forms.ModelForm): # Create a class that turns our Model into a web form
     class Meta: # The Meta class tells Django the "Who" and "What" of the form
@@ -17,5 +17,18 @@ class PostForm(forms.ModelForm): # Create a class that turns our Model into a we
                 # Add TailwindCSS classes and set a minimum height for the text area
                 'class': 'w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 bg-white/50 min-h-[200px]',
                 'placeholder': 'What is on your mind?' # The hint text shown before typing
+            }),
+        }
+
+# This form allows users to submit comments
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 bg-white/50 min-h-[100px] text-sm',
+                'placeholder': 'Add a comment...',
+                'rows': 3
             }),
         }
