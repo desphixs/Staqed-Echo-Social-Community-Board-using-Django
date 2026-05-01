@@ -13,6 +13,7 @@
         {% for topic in topics %}
             <li>
                 <h3>{{ topic.title }}</h3>
+                <small>Posted on: {{ topic.created_at }}</small>
                 <p>{{ topic.content }}</p>
             </li>
         {% empty %}

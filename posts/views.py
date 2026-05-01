@@ -1,28 +1,16 @@
 from django.shortcuts import render
+from .models import Post # Import the Post model from our models.py file
 
 # Create your views here.
 
 def index(request):
-    # Define a list of hardcoded topics (our "menu" of data)
-    topics = [
-        {
-            'title': 'How to learn Django fast?',
-            'content': "I'm just starting out and wanted to know the best resources to master Django in a few weeks."
-        },
-        {
-            'title': 'The future of web development',
-            'content': "With AI on the rise, what do you think the next 5 years look like for junior developers?"
-        },
-        {
-            'title': 'My first Echo post!',
-            'content': "Just testing out this cool new platform I'm building. It feels great to see it coming together!"
-        },
-    ]
+    # Fetch all posts from the database, ordered by newest first
+    posts = Post.objects.all().order_by('-created_at')
     
-    # Put the data into a "context" dictionary so the template can see it
+    # Put the database records into our context dictionary
     context = {
-        'topics': topics
+        'topics': posts # We keep the name 'topics' so we don't have to change our HTML much!
     }
     
-    # Send the request, the template path, and the context data to the browser
+    # Render the template with the real data from the database
     return render(request, 'posts/index.html', context)
