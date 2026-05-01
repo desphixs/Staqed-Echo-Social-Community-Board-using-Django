@@ -16,4 +16,7 @@ urlpatterns = [
     
     # Create Page: A fixed path for the post submission form
     path('create/', views.create_post, name='create_post'),
+    
+    # Dashboard: A private space for the logged-in user
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]

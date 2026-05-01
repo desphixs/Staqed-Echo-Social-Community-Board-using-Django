@@ -122,3 +122,19 @@ def delete_post(request, pk): # This view handles deleting a post
     
     # If it's a GET request, show the confirmation page
     return render(request, 'posts/delete_post.html', {'post': post})
+
+@login_required
+def dashboard(request):
+    # 1. Fetch all posts written by the current user
+    my_posts = Post.objects.filter(author=request.user).order_by('-created_at')
+    
+    # 2. Fetch comments that OTHER people left on the user's posts
+    # We use post__author to look through the post and find its author
+    comments_on_my_posts = Comment.objects.filter(post__author=request.user).exclude(user=request.user).order_by('-created_at')
+    
+    context = {
+        'my_posts': my_posts,
+        'comments_received': comments_on_my_posts,
+    }
+    
+    return render(request, 'posts/dashboard.html', context)
