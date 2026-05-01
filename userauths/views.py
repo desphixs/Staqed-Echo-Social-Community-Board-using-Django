@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect # Tools to show pages and move users around
-from django.contrib.auth import authenticate, login, logout # Added logout here
+from django.contrib.auth import authenticate, login, logout # Standard Django auth tools
 from django.contrib import messages # Tool to show alerts and error messages
-from .forms import UserRegisterForm, UserLoginForm # Import the forms we built
+from django.contrib.auth.decorators import login_required # Security lock for views
+from .forms import UserRegisterForm, UserLoginForm, ProfileUpdateForm # Our custom forms
 
 # This view handles when a user wants to leave the clubhouse
 def logout_view(request):
@@ -60,3 +61,22 @@ def login_view(request):
     
     # We show the signin template and pass our form
     return render(request, 'userauths/signin.html', {'form': form})
+
+# This view handles when a user wants to personalize their identity
+@login_required
+def profile_edit(request):
+    # 1. If the user is submitting their changes
+    if request.method == 'POST':
+        # We fill the form with the POST data (text) AND the FILES data (images)
+        # instance=request.user tells Django which user we are updating
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            # Save the updated information back to the database
+            form.save()
+            # Redirect to the dashboard to see the changes
+            return redirect('dashboard')
+    else:
+        # 2. If visiting, show the form pre-filled with the current user's data
+        form = ProfileUpdateForm(instance=request.user)
+        
+    return render(request, 'userauths/profile_edit.html', {'form': form})

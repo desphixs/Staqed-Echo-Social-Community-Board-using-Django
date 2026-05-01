@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | Echo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen">
+
+    <!-- Simple Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <nav class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="/" class="text-xl font-bold tracking-tight text-indigo-600">Echo</a>
+            <div class="flex gap-6 text-sm font-medium text-slate-600">
+                <a href="/" class="hover:text-indigo-600 transition-colors">Feed</a>
+                <a href="{% url 'dashboard' %}" class="hover:text-indigo-600 transition-colors">Dashboard</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-6 py-12">
+        <div class="mb-10 text-center">
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900">Personalize Your Profile</h1>
+            <p class="text-slate-500 mt-2">Update your identity and how others see you on Echo.</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="bg-white border border-slate-200 p-8 rounded-3xl shadow-sm space-y-6">
+            {% csrf_token %}
+            
+            <!-- Current Avatar Preview -->
+            <div class="flex flex-col items-center gap-4 mb-8">
+                <div class="relative group">
+                    {% if user.profile_pic %}
+                        <img src="{{ user.profile_pic.url }}" alt="Avatar" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg">
+                    {% else %}
+                        <div class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-3xl shadow-lg">
+                            {{ user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Current Avatar</p>
+            </div>
+
+            <!-- Form Fields -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Username</label>
+                    {{ form.username }}
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Full Name</label>
+                    {{ form.full_name }}
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Biography</label>
+                    {{ form.bio }}
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Profile Picture</label>
+                    {{ form.profile_pic }}
+                    <p class="text-[10px] text-slate-400 mt-2 font-medium">JPG or PNG only. Recommended size: 400x400px.</p>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-slate-100 flex gap-4">
+                <a href="{% url 'dashboard' %}" class="flex-1 text-center py-3 px-6 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-all">
+                    Cancel
+                </a>
+                <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-indigo-200 active:scale-[0.98]">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </main>
+
+</body>
+</html>

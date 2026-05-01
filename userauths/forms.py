@@ -39,3 +39,28 @@ class UserLoginForm(AuthenticationForm):
             self.fields['username'].widget.attrs.update({'class': form_style, 'placeholder': 'Enter your email'})
         if 'password' in self.fields:
             self.fields['password'].widget.attrs.update({'class': form_style, 'placeholder': 'Enter your password'})
+
+# This form allows users to update their identity
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'full_name', 'bio', 'profile_pic']
+        
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 bg-white/50',
+                'placeholder': 'Choose a unique username'
+            }),
+            'full_name': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 bg-white/50',
+                'placeholder': 'Your full name'
+            }),
+            'bio': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 bg-white/50',
+                'placeholder': 'Tell us about yourself...',
+                'rows': 4
+            }),
+            'profile_pic': forms.FileInput(attrs={
+                'class': 'w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all bg-white/50'
+            }),
+        }
