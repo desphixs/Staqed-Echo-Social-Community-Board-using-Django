@@ -45,8 +45,11 @@
                 <h1 class="text-4xl font-bold tracking-tight text-slate-900 leading-tight">
                     {{ post.title }}
                 </h1>
-                <div class="flex items-center gap-2 mt-4 text-sm text-slate-400 font-medium">
+                <div class="flex items-center justify-between mt-4 text-sm text-slate-400 font-medium">
                     <span>Published on {{ post.created_at|date:"F j, Y" }}</span>
+                    <a href="{% url 'edit_post' post.id %}" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+                        Edit Post
+                    </a>
                 </div>
             </header>
 

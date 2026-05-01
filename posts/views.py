@@ -37,3 +37,16 @@ def create_post(request):
     
     return render(request, 'posts/create_post.html', {'form': form})
 
+def edit_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+        
+    return render(request, 'posts/edit_post.html', {'form': form, 'post': post})
+
